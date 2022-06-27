@@ -1,6 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-medium-nextjs/node_modules
+medium-nextjs-clone/node_modules
 
 # dependencies
 /node_modules
