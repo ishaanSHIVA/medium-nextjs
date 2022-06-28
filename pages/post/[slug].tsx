@@ -106,7 +106,7 @@ const Post = (props:Props) => {
             <h4 className="text-3xl font-bold">Leave a comment below!</h4>
             <hr className="py-3 mt-2"/>
 
-            <input  type="hidden" value={post._id} name="_id" {...register("_id")} />
+            <input  type="hidden" value={post._id} {...register("_id")} />
 
             <label className='block mb-5 ' htmlFor="">
                 <span className="text-gray-700 ">
