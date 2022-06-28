@@ -15,7 +15,7 @@ interface Props {
 }
 
 
-const Home: NextPage = ({ posts}:Props) => {
+const Home: NextPage<Props> = ({ posts}:Props) => {
   useEffect(() => {
     console.log(posts)
   }, [posts])
