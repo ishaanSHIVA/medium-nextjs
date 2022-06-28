@@ -12,7 +12,7 @@ export interface Post {
     };
     body:[object];
     mainImage: string;
-    comment:[Comment];
+    comments:[Comment];
 
 }
 
@@ -29,4 +29,5 @@ export interface Comment {
     _rev: string;
     _type: string;
     _updatedAt: string;
+    name: string;
 }

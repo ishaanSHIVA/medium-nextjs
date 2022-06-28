@@ -141,6 +141,17 @@ const Post = (props:Props) => {
 
         </form>
         )}
+
+        {/* Comments */}
+        <div className="flex flex-col max-w-2xl p-10 mx-auto my-10 space-y-2 shadow shadow-yellow-500">
+            <h3 className="text-4xl">Comments</h3>
+            <hr className="pb-2" />
+            {post.comments.map(comment => (
+                <div key={comment._id} className="">
+                    <p><span className="text-yellow-500">{comment.name}</span>:{comment.comment}</p>
+                </div>
+            ))}
+        </div>
     </main>
     </>
     
