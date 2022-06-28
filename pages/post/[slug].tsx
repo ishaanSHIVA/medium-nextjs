@@ -14,8 +14,10 @@ interface Props {
 const Post = (props:Props) => {
     const {post} = props;
     console.log(post)
+    console.log(process.env.NEXT_PUBLIC_SANITY_DATASET!)
   return (
       <>
+      
       <Head>
      <title>{post.title}</title>
      <link rel="icon" href="/favicon.ico" />
