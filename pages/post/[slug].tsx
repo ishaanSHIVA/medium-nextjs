@@ -126,7 +126,7 @@ const Post = (props:Props) => {
                 <span className="text-gray-700 ">
                     Comment
                 </span>
-                <textarea {...register("comment",{required:true})} className="block w-full px-3 mt-1 border rounded shadow outline-none focus:ring pt-1y-2 m form-textarea form-input ring-yellow-500" rows={8} placeholder="John Appleseed" type="text-area" />
+                <textarea  {...register("comment",{required:true})} className="block w-full px-3 mt-1 border rounded shadow outline-none focus:ring pt-1y-2 m form-textarea form-input ring-yellow-500" rows={8} placeholder="John Appleseed"  />
 
             </label>
 
