@@ -21,7 +21,7 @@ const Home: NextPage<Props> = ({ posts}:Props) => {
   }, [posts])
   
   return (
-    <div className="mx-auto max-w-7xl">
+    <div className="mx-auto max-w-7xl ">
       <Head>
         <title>Medium Blog</title>
         <link rel="icon" href="/favicon.ico" />

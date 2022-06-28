@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { sanityClient,urlFor } from "../../sanity"
+import {useForm,SubmitHandler} from 'react-hook-form'
 
 import Header from '../../components/Header'
 import { Post } from "../../typings"
@@ -7,14 +8,37 @@ import { GetStaticProps } from 'next'
 import PortableText from 'react-portable-text'
 import Head from 'next/head'
 
+interface IFormInput { 
+    _id: string;
+    name: string;
+    email: string;
+    comment: string;
+}
+
+
 interface Props {
     post: Post;
 }
 
 const Post = (props:Props) => {
+    
+    const [submitted, setSubmitted] = useState(false)
     const {post} = props;
     console.log(post)
-    console.log(process.env.NEXT_PUBLIC_SANITY_DATASET!)
+    const { register,handleSubmit,formState:{errors} } = useForm<IFormInput>()
+
+    const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+        setSubmitted(true)
+           await fetch("/api/createComment", {
+               method: "POST",
+               body: JSON.stringify(data)
+           }).then(() => {
+               console.log(data)
+           }).catch((err) => {
+               console.log(err)
+           })
+    }
+    
   return (
       <>
       
@@ -66,30 +90,57 @@ const Post = (props:Props) => {
         </article>
         <hr className="max-w-lg mx-auto my-5 border border-yellow-500" />
 
-        {/* <form className="flex flex-col max-w-2xl p-5 mx-auto my-10 mb-10" action="">
-            <label htmlFor="">
-                <span>
+        {submitted && (
+            <div className="flex flex-col max-w-2xl p-10 mx-auto my-10 text-white bg-yellow-500">
+                <h3 className='text-3xl font-bold'>Thank you for submitting!</h3>
+                <p>It will show after the form has been approvd by the content creater.</p>
+            </div>
+        )}
+
+        {!submitted && (
+            
+        
+
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col max-w-2xl p-5 mx-auto my-10 mb-10" action="">
+            <h3 className="text-sm text-yellow-500 ">Enjoyed the article?</h3>
+            <h4 className="text-3xl font-bold">Leave a comment below!</h4>
+            <hr className="py-3 mt-2"/>
+
+            <input  type="hidden" value={post._id} name="_id" {...register("_id")} />
+
+            <label className='block mb-5 ' htmlFor="">
+                <span className="text-gray-700 ">
                     Name
                 </span>
-                <input placeholder="John Appleseed" type="text" />
+                <input {...register("name",{required:true})}   className="block w-full px-3 py-2 mt-1 border rounded shadow form-input ring-yellow-500" placeholder="John Appleseed" type="text" />
 
             </label>
-            <label htmlFor="">
-                <span>
+            <label className='block mb-5 ' htmlFor="">
+                <span className="text-gray-700 ">
                     Email
                 </span>
-                <input placeholder="John Appleseed" type="email" />
+                <input {...register("email",{required:true})}  w-full ring-yellow-500 className="block w-full px-3 py-2 mt-1 border rounded shadow form-input ring-yellow-500" placeholder="John Appleseed" type="email" />
 
             </label>
-            <label htmlFor="">
-                <span>
+            <label className='block mb-5 ' htmlFor="">
+                <span className="text-gray-700 ">
                     Comment
                 </span>
-                <textarea rows={8} placeholder="John Appleseed" type="text-area" />
+                <textarea {...register("comment",{required:true})} className="block w-full px-3 mt-1 border rounded shadow outline-none focus:ring pt-1y-2 m form-textarea form-input ring-yellow-500" rows={8} placeholder="John Appleseed" type="text-area" />
 
             </label>
 
-        </form> */}
+            {/* Error */}
+            <div className="flex flex-col p-5 ">
+            {errors.name && <span className="text-red-500">- The Name Field is required</span>}
+            {errors.comment &&<span className="text-red-500">- The Comment Field is required</span>}
+            {errors.email &&<span className="text-red-500">Email Field is required</span>}
+            </div>
+
+            <input className="px-4 font-bold text-white bg-yellow-500 rounded cursor-pointer hover:bg-yellow-400 focus:outline-none focus:shadow-outline" type="submit" />
+
+        </form>
+        )}
     </main>
     </>
     
@@ -130,6 +181,11 @@ export const getStaticProps:GetStaticProps = async ({ params }) => {
             mainImage,
             slug,
             body,
+            'comments': *[
+                _type == "comment" && 
+                post._ref == ^._id &&
+                approved == true 
+            ],
             author -> {
                name,
                image
